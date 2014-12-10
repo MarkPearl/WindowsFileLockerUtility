@@ -1,0 +1,21 @@
+﻿<Window x:Class="WindowsFileLockerUtility.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	    DataContext="{Binding Main, Mode=OneWay, Source={StaticResource Locator}}"
+        Title="Windows File Locker Utility" Height="350" Width="525">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBox></TextBox>
+        <Button Grid.Column="1" Width="20">...</Button>
+        <CheckBox Grid.Column="2" VerticalAlignment="Center" Margin="5" IsChecked="{Binding Locked}">Lock File</CheckBox> 
+    </Grid>
+</Window>
