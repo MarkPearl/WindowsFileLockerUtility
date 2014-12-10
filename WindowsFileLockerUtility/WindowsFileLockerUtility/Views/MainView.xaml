@@ -8,14 +8,15 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBox></TextBox>
-        <Button Grid.Column="1" Width="20">...</Button>
-        <CheckBox Grid.Column="2" VerticalAlignment="Center" Margin="5" IsChecked="{Binding Locked}">Lock File</CheckBox> 
+        <TextBox Text="{Binding FileToLock}" IsEnabled="{Binding IsFileToLockEnabled}"></TextBox>
+        <Button Grid.Column="1" Width="20" Command="{Binding AddFileCommand}">...</Button>
+        <ToggleButton  VerticalAlignment="Center" IsChecked="{Binding Locked}" Grid.Row="3" Height="70" Content="Lock File"/>
     </Grid>
 </Window>
