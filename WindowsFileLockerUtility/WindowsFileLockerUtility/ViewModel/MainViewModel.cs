@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Windows.Input;
 using WindowsFileLockerUtility.Domain;
@@ -68,7 +69,7 @@ namespace WindowsFileLockerUtility.ViewModel
         private void SelectFileToAdd()
         {
             var dialog = new OpenFileDialog();
-            dialog.InitialDirectory = "c:\\";
+	        dialog.InitialDirectory = Environment.CurrentDirectory;
             dialog.Filter = "All files (*.*)|*.*";
             dialog.FilterIndex = 1;
             dialog.RestoreDirectory = true;

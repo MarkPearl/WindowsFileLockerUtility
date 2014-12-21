@@ -3,20 +3,49 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	    DataContext="{Binding Main, Mode=OneWay, Source={StaticResource Locator}}"
         Title="Windows File Locker Utility" Height="350" Width="525">
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <TextBox Text="{Binding FileToLock}" IsEnabled="{Binding IsFileToLockEnabled}"></TextBox>
-        <Button Grid.Column="1" Width="20" Command="{Binding AddFileCommand}">...</Button>
-        <ToggleButton  VerticalAlignment="Center" IsChecked="{Binding Locked}" Grid.Row="3" Height="70" Content="Lock File"/>
-    </Grid>
+	<Grid Margin="10">
+		<Grid.Resources>
+			<StackPanel x:Key="Locked">
+				<Image Source="../Images/Locked.png" Width="32" Height="32"/>
+				<TextBlock>Locked</TextBlock>
+			</StackPanel>
+			<StackPanel x:Key="Unlocked">
+				<Image Source="../Images/Unlocked.png" Width="32" Height="32"/>
+				<TextBlock>Unlocked</TextBlock>
+			</StackPanel>
+		</Grid.Resources>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+		<TextBox Text="{Binding FileToLock}" IsEnabled="{Binding IsFileToLockEnabled}"></TextBox>
+		<Button Grid.Row="0" Grid.Column="1" Width="20" Command="{Binding AddFileCommand}">...</Button>
+		<ToggleButton  
+			VerticalAlignment="Center" 
+			IsChecked="{Binding Locked}" 
+			Grid.Row="3" 
+			Grid.Column="0" 
+			Height="70">						
+			<ToggleButton.Style>
+				<Style TargetType="ToggleButton">
+					<Style.Triggers>
+						<Trigger Property="IsChecked" Value="False">
+							<Setter Property="Content" Value="{StaticResource Unlocked}"/>
+						</Trigger>
+						<Trigger Property="IsChecked" Value="True">
+							<Setter Property="Content" Value="{StaticResource Locked}"/>
+						</Trigger>
+					</Style.Triggers>
+				</Style>
+			</ToggleButton.Style>
+			
+		</ToggleButton>
+	</Grid>
 </Window>
