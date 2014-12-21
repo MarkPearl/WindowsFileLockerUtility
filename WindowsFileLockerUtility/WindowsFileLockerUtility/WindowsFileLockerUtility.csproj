@@ -70,7 +70,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Components\AutoGreyableImage.cs" />
     <Compile Include="Domain\FilesLocker.cs" />
+    <Compile Include="LockFileSelectDialog.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="Views\MainView.xaml">

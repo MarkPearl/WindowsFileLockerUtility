@@ -4,7 +4,6 @@ using System.Windows.Input;
 using WindowsFileLockerUtility.Domain;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace WindowsFileLockerUtility.ViewModel
 {
@@ -14,16 +13,18 @@ namespace WindowsFileLockerUtility.ViewModel
         private string _fileToLock;
 
         private readonly FilesLocker _filesLocker;
-        private bool _isFileToLockEnabled;
-        private ICommand _addFile;
+	    private readonly LockFileSelectDialog _lockFileSelectDialog;
 
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
-        public MainViewModel()
+	    private bool _isFileToLockEnabled;
+	    private bool _canLock;
+	    private ICommand _addFile;
+
+	    public MainViewModel()
         {
             _isFileToLockEnabled = true;
+	        _canLock = false;
             _filesLocker = new FilesLocker();
+	        _lockFileSelectDialog = new LockFileSelectDialog();
         }
 
         public ICommand AddFileCommand
@@ -48,37 +49,6 @@ namespace WindowsFileLockerUtility.ViewModel
             }
         }
 
-        private void UpdateLockedFile()
-        {
-            if (!File.Exists(FileToLock))
-            {
-                Locked = false;
-            }
-
-            if (Locked)
-            {
-                _filesLocker.LockFile(FileToLock);
-                IsFileToLockEnabled = false;
-                return;
-            }
-
-            _filesLocker.UnlockFile(FileToLock);
-            IsFileToLockEnabled = true;
-        }
-
-        private void SelectFileToAdd()
-        {
-            var dialog = new OpenFileDialog();
-	        dialog.InitialDirectory = Environment.CurrentDirectory;
-            dialog.Filter = "All files (*.*)|*.*";
-            dialog.FilterIndex = 1;
-            dialog.RestoreDirectory = true;
-            var dialogResult = dialog.ShowDialog();
-            if (dialogResult != true) return;
-
-            FileToLock = dialog.FileName;
-        }
-
         public string FileToLock
         {
             get
@@ -89,10 +59,11 @@ namespace WindowsFileLockerUtility.ViewModel
             {
                 _fileToLock = value;
                 RaisePropertyChanged(() => FileToLock);
+	            UpdateWhetherFileCanBeLocked();
             }
         }
 
-        public bool IsFileToLockEnabled
+	    public bool IsFileToLockEnabled
         {
             get { return _isFileToLockEnabled; }
             set
@@ -101,5 +72,50 @@ namespace WindowsFileLockerUtility.ViewModel
                 RaisePropertyChanged(() => IsFileToLockEnabled);
             }
         }
+
+	    public bool CanLock
+	    {
+		    get { return _canLock; }
+		    private set
+		    {
+			    _canLock = value;
+			    RaisePropertyChanged(() => CanLock);
+		    }
+	    }
+
+		private void UpdateLockedFile()
+		{
+			if (!File.Exists(FileToLock))
+			{
+				Locked = false;
+			}
+
+			if (Locked)
+			{
+				_filesLocker.LockFile(FileToLock);
+				IsFileToLockEnabled = false;
+				return;
+			}
+
+			_filesLocker.UnlockFile(FileToLock);
+			IsFileToLockEnabled = true;
+		}
+
+		private void SelectFileToAdd()
+		{
+			var proposedFileToSelect = _lockFileSelectDialog.SelectedFile();
+			if (proposedFileToSelect == null) return;
+			FileToLock = proposedFileToSelect;
+		}
+
+		private void UpdateWhetherFileCanBeLocked()
+		{
+			if (File.Exists(FileToLock))
+			{
+				CanLock = true;
+				return;
+			}
+			CanLock = false;
+		}
     }
 }
